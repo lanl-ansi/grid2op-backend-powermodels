@@ -4,7 +4,7 @@ import sys
 import subprocess
 
 
-print('starting julia...')
+print("starting julia...")
 julia_process = subprocess.Popen(
     "julia --project=.. -e 'include(\"../PowerModelsBackend.jl\"); interactive_mode()'",
     shell=True,
@@ -23,6 +23,7 @@ while True:
         break
     if output:
         print(output.strip())
+
 print("julia process ready for input")
 
 
@@ -62,13 +63,13 @@ def run_julia_backend_command(julia_process, command):
     return results[0]
 
 
-result = run_julia_backend_command(julia_process, "load_grid, data/case5.m")
-result = run_julia_backend_command(julia_process, "data_summary")
-result = run_julia_backend_command(julia_process, "run_ac_pf")
-result = run_julia_backend_command(julia_process, "data_summary")
-result = run_julia_backend_command(julia_process, "run_dc_pf")
-result = run_julia_backend_command(julia_process, "data_summary")
-result = run_julia_backend_command(julia_process, "shutdown")
+result = run_julia_backend_command(julia_process, "load_grid, data/case5.m"); print("result: {}".format(result))
+result = run_julia_backend_command(julia_process, "data_summary"); print("result: {}".format(result))
+result = run_julia_backend_command(julia_process, "run_ac_pf"); print("result: {}".format(result))
+result = run_julia_backend_command(julia_process, "data_summary"); print("result: {}".format(result))
+result = run_julia_backend_command(julia_process, "run_dc_pf"); print("result: {}".format(result))
+result = run_julia_backend_command(julia_process, "data_summary"); print("result: {}".format(result))
+result = run_julia_backend_command(julia_process, "shutdown"); print("result: {}".format(result))
 
 
 print("julia stderr:")
@@ -76,4 +77,4 @@ sys.stdout.flush()
 sys.stderr.flush()
 outputs = julia_process.stderr.readlines()
 for output in outputs:
-    sys.stderr.write('\033[91m julia:\033[0m {}'.format(output))
+    sys.stderr.write("\033[91m julia:\033[0m {}".format(output))

@@ -16,16 +16,11 @@ function reset()
     global data = Dict{String,Any}()
 end
 
-
 function load_grid(file::String)
     global data = PowerModels.parse_file(file)
 end
 
-
 function run_ac_pf()
-    # original_stdout = stdout
-    # rd, wr = redirect_stdout()
-
     result = PowerModels.run_ac_pf(data, nlp_solver)
     if result["termination_status"] == PowerModels.LOCALLY_SOLVED
         PowerModels.update_data!(data, result["solution"])
@@ -33,11 +28,7 @@ function run_ac_pf()
         println(stderr, "error in run_ac_pf solver, termination status is $(result["termination_status"])")
     end
 
-    # flush(rd)
-    # for line in readlines(rd)
-    #     print(stderr, line)
-    # end
-    # redirect_stdout(original_stdout)
+    return result["termination_status"] == PowerModels.LOCALLY_SOLVED
 end
 
 function run_dc_pf()
@@ -47,6 +38,8 @@ function run_dc_pf()
     else
         println(stderr, "error in run_dc_pf solver, termination status is $(result["termination_status"])")
     end
+
+    return result["termination_status"] == PowerModels.LOCALLY_SOLVED
 end
 
 function data_summary()
@@ -83,13 +76,13 @@ function interactive_mode()
 
         elseif startswith(line, "run_ac_pf")
             #run_ac_pf()
-            redirect_stdout(run_ac_pf, stderr)
-            println("")
+            converged = redirect_stdout(run_ac_pf, stderr)
+            println(converged)
             println("complete")
 
         elseif startswith(line, "run_dc_pf")
-            redirect_stdout(run_dc_pf, stderr)
-            println("")
+            converged = redirect_stdout(run_dc_pf, stderr)
+            println(converged)
             println("complete")
 
         elseif startswith(line, "reset")

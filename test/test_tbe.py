@@ -82,4 +82,4 @@ sys.stdout.flush()
 sys.stderr.flush()
 outputs = julia_process.stderr.readlines()
 for output in outputs:
-    sys.stderr.write('\033[91m julia:\033[0m {}'.format(output))
+    sys.stderr.write("\033[91m julia:\033[0m {}".format(output))
